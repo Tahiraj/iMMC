@@ -1,5 +1,6 @@
 # iMMC
-Exploring microbial diversity using portable technology for in situ analysis.
+
+### Exploring microbial diversity using portable technology for in situ analysis.
 
 For metagenomic analysis we have 72 samples of Coral and Mangroves and one positive control. 
 
