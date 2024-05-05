@@ -12,8 +12,8 @@ Prepare one sample file
 C1	C1.filt.fastq.gz	pair1
 ```
 and then replicate for each sample from a list by replacing the sample name  with new sample name.
-For single long read use only `pair1`  
-The code below create a new sample file and also replaces the `C1` with `C2`.
+For single long read use only `pair1`.  
+The code below create a directory and new sample file and also replaces the `old sample name` with `new sample name`.
 
 ```
 #!/bin/bash
