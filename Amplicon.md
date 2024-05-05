@@ -16,7 +16,7 @@ process {
 #SBATCH --job-name=nextflow
 #SBATCH --output=./Log/nextflowF.%A.out
 #SBATCH --error=./Log/nextflowF.%A.err
-#SBATCH --time=04:00:00
+#SBATCH --time=12:00:00
 #SBATCH --nodes=1
 #SBATCH --mem=50GB
 #SBATCH --cpus-per-task=1
