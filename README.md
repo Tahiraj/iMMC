@@ -1,4 +1,7 @@
 # iMMC
+Exploring microbial diversity using portable technology for in situ analysis.
+
+For metagenomic analysis we have 72 samples of Coral and Mangroves and one positive control. 
 The sample file specifies the samples, the names of their corresponding raw read files and the sequencing pair represented in those files, separated by tabulators.
 It has the format: 
 ```
