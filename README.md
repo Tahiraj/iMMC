@@ -1,5 +1,6 @@
 # iMMC
 
+```
 #!/bin/bash
 #SBATCH --job-name=sequeez
 #SBATCH --output=./Log/sequeez.%A_%a.out
@@ -18,4 +19,4 @@ sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 cd ${sample}
 
 sqm_longreads.pl -p ${sample} -s test.samples -f data/ -t 32
-
+```
