@@ -1,5 +1,39 @@
 # iMMC
+The sample file specifies the samples, the names of their corresponding raw read files and the sequencing pair represented in those files, separated by tabulators.
+It has the format: 
+```
+<Sample>	 <filename> 	<pair1|pair2>	
+```
+Prepare one sample file  
+```
+C1	C1.filt.fastq.gz	pair1
+```
+and then replicate for each sample from a list by replacing the sample name  with new sample name.
+For single long read use only `pair1`  
+The code below create a new sample file and also replaces the `C1` with `C2`.
 
+```
+#!/bin/bash
+
+sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
+
+prefix=`basename $sample .fastq.gz`
+
+mkdir -p  squeezeMeta/${prefix}/data
+
+cp PreProcess_q12/${prefix}/${prefix}.filt.fastq.gz squeezeMeta/${prefix}/data
+
+cp SqueezeMeta/test.samples squeezeMeta/${prefix}/
+
+cd squeezeMeta/${prefix}
+
+oldstring=“C1"
+
+newstring=“$prefix"
+
+sed -i "s/$oldstring/$newstring/g" test.samples
+```
+For Squeezemeta the sample file and data should be in same directory 
 ```
 #!/bin/bash
 #SBATCH --job-name=sequeez
