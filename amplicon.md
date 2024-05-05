@@ -1,4 +1,5 @@
-## Taxonomic classification of single reads from both amplicon-targeted 
+## Taxonomic classification of single reads from  amplicon-targeted 
+
 Create a file `ibex.config`
 
 ```
@@ -10,7 +11,7 @@ process {
 
 }
 ```
- ```
+```
 #!/bin/bash
 #SBATCH --job-name=nextflow
 #SBATCH --output=./Log/nextflowF.%A.out
@@ -23,10 +24,6 @@ process {
 time date
 module load nextflow singularity;
 #nextflow run epi2me-labs/wf-metagenomics --fastq data/ -profile singularity -c ibex.config 
-
-#nextflow run epi2me-labs/wf-metagenomics --fastq data/ --min_len 1200 --min_read_qual 11 --database_set "SILVA_138_1" -profile singularity -c ibex.config
-
-#nextflow run epi2me-labs/wf-metagenomics --fastq data/ --min_len 1200 --min_read_qual 11 --max_len 2000  --database_set "ncbi_16s_18s_28s_ITS" -profile singularity -c ibex.config
 
 nextflow run epi2me-labs/wf-metagenomics --fastq ../data/ --min_len 1200 --min_read_qual 15 --max_len 1800  --database_set "ncbi_16s_18s_28s_ITS" -profile singularity -c ibex.config
 ```
