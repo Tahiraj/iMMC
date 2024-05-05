@@ -14,6 +14,15 @@ The code below create a new sample file and also replaces the `C1` with `C2`.
 
 ```
 #!/bin/bash
+#SBATCH --job-name=sequeez
+#SBATCH --output=./Log/sequeez.%A_%a.out
+#SBATCH --error=./Log/sequeez.%A_%a.err
+#SBATCH --time=30:00
+#SBATCH --nodes=1
+#SBATCH --mem=5GB
+#SBATCH --array=1-73
+
+cd /ibex/project/c2207/iMMC/Metagenome
 
 sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 
