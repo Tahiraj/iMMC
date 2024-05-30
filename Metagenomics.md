@@ -51,12 +51,12 @@ For Squeezemeta the sample file and data should be in same directory
 #SBATCH --error=./Log/sequeez.%A_%a.err
 #SBATCH --time=05-00:00:00
 #SBATCH --nodes=1
-#SBATCH --mem=249GB
+#SBATCH --mem=360GB
 #SBATCH --array=1-73
 
-module load squeezemeta/1.6.0
+module load squeezemeta/1.6.3
 
-cd /ibex/project/c2207/iMMC/Metagenome/squeezeMeta
+# cd /ibex/project/c2207/iMMC/Metagenome/squeezeMeta
 
 sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 
