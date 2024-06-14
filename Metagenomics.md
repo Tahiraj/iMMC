@@ -64,3 +64,23 @@ cd ${sample}
 
 sqm_longreads.pl -p ${sample} -s test.samples -f data/ -t 32
 ```
+
+## Extract table for downstream processing
+
+We use [sqmreads2tables.py](https://github.com/jtamames/SqueezeMeta/blob/master/utils/sqmreads2tables.py) to extract table for downstram processing.
+```
+cat sample.list |head
+C1
+C2
+C3 ...
+```
+All files in project directory, command look like `sqmreads2tables.py /path/to/project /path/to/output_dir --trusted-functions --force-overwrite`
+```
+i=0
+while ((i++)); read -r sample
+do  
+
+sqmreads2tables.py ${sample}/${sample}/ ${sample}/${sample}_out --trusted-functions --force-overwrite
+        
+done < sample.list
+```
