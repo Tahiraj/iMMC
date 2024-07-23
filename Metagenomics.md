@@ -84,3 +84,18 @@ sqmreads2tables.py ${sample}/${sample}/ ${sample}/${sample}_out --trusted-functi
         
 done < sample.list
 ```
+Do not run in terminal node if the size of files is large, rather run as a batch script
+
+```
+#!/bin/bash
+#SBATCH --job-name=sqmtb
+#SBATCH --output=./Log/sqmtb.%J.out
+#SBATCH --error=./Log/sqmtb.%J.err
+#SBATCH --time=20:00
+#SBATCH --nodes=1
+#SBATCH --mem=360GB
+
+module load squeezemeta/1.6.3
+sample="M19"
+sqmreads2tables.py ${sample}/ ${sample}_out --trusted-functions --force-overwrite
+```
