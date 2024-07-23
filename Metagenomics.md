@@ -84,7 +84,7 @@ sqmreads2tables.py ${sample}/${sample}/ ${sample}/${sample}_out --trusted-functi
         
 done < sample.list
 ```
-Do not run in terminal node if the size of files is large, rather run as a batch script
+If file size is large, Do not run in terminal node, rather run as a batch script
 
 ```
 #!/bin/bash
