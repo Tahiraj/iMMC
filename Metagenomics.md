@@ -1,4 +1,4 @@
-# Taxonomic classification of single reads from shotgun metagenomics sequencing.
+# Taxonomic classification of long reads from shotgun metagenomics sequencing.
 
 The sample file specifies the samples, the names of their corresponding raw read files and the sequencing pair represented in those files, separated by tabulators.
 It has the format: 
