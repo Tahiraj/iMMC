@@ -8,19 +8,18 @@
 #SBATCH --cpus-per-task=32
 #SBATCH --array=1-73
 
-cd /ibex/project/c2207/iMMC/Metagenome
-
 sample=`ls data/fastq|grep .fastq.gz| head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 
 prefix=`basename $sample .fastq.gz`
 
 current=$(pwd)
+echo $current
 
 mkdir -p "PreProcess/$prefix"
 
-samplePath="${current}/data/fastq"
+samplePath="data/fastq"
 
-PProcDir="${current}/PreProcess/${prefix}";
+PProcDir="PreProcess/${prefix}";
 
 r1="${samplePath}/${prefix}.fastq.gz"
 
@@ -36,7 +35,6 @@ module load fastp
 filtR1="${PProcDir}/${prefix}.filt.fastq.gz";
 echo $r1;   echo $filtR1; 
 
-#fastp -i ${PorechopR1} -o ${filtR1} -e 12 --thread 32 --dedup -j ${PProcDir}/${prefix}_fastp.json -h ${PProcDir}/${prefix}_fastp.html;
 fastp -i ${PorechopR1} -o ${filtR1} -q 12 --thread 32 --dedup -j ${PProcDir}/${prefix}_fastp.json -h ${PProcDir}/${prefix}_fastp.html;
 
 module load fastqc/0.12.0
