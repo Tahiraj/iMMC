@@ -23,7 +23,7 @@ The code below create a directory and new sample file and also replaces the `old
 #SBATCH --mem=5GB
 #SBATCH --array=1-73
 
-cd /ibex/project/c2207/iMMC/Metagenome
+# iMMC/Metagenome/squeezeMeta
 
 sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 
@@ -56,8 +56,6 @@ For Squeezemeta the sample file and data should be in same directory
 
 module load squeezemeta/1.6.3
 
-# cd /ibex/project/c2207/iMMC/Metagenome/squeezeMeta
-
 sample=`cat sample.list | head -n $SLURM_ARRAY_TASK_ID | tail -n 1`
 
 cd ${sample}
@@ -75,15 +73,7 @@ C2
 C3 ...
 ```
 All files in project directory, command look like `sqmreads2tables.py /path/to/project /path/to/output_dir --trusted-functions --force-overwrite`
-```
-i=0
-while ((i++)); read -r sample
-do  
 
-sqmreads2tables.py ${sample}/${sample}/ ${sample}/${sample}_out --trusted-functions --force-overwrite
-        
-done < sample.list
-```
 If file size is large, Do not run in terminal node, rather run as a batch script
 
 ```
@@ -96,6 +86,9 @@ If file size is large, Do not run in terminal node, rather run as a batch script
 #SBATCH --mem=360GB
 
 module load squeezemeta/1.6.3
-sample="M19"
-sqmreads2tables.py ${sample}/ ${sample}_out --trusted-functions --force-overwrite
+i=0
+while ((i++)); read -r sample
+do  
+sqmreads2tables.py ${sample}/${sample}/ ${sample}/${sample}_out --trusted-functions --force-overwrite        
+done < sample.list
 ```
