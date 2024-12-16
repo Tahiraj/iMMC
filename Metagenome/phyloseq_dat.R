@@ -2,8 +2,8 @@ library(tidyverse)
 library(phyloseq)
 library(readxl)       
 library(decontam)
-packageVersion("phyloseq")
 #decontam package provides simple statistical methods to identify and visualize contaminating DNA features
+packageVersion("phyloseq")
 rm(list = ls())
 
 abund <- read_excel("Abund_species.allfilter.Metagenome.xlsx", sheet ="abundance")
