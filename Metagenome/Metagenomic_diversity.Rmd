@@ -1,0 +1,246 @@
+---
+title: 'Metagenomic: Permanova test'
+author: "Tahira Jamil"
+date: "2024-11-12"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(phyloseq)
+library(readxl)       # to import the data from Excel file
+library(gridExtra)
+library(vegan)
+library(pairwiseAdonis)
+```
+ 
+## Taxonomic Diversity
+```{r}
+immc_decontam <- readRDS("immc_decontam.rds")
+source("functions.R")
+
+
+#================================================================================
+# Permanova test
+#================================================================================
+ 
+OTU_decontaminated <- otu_table(immc_decontam)
+OTUp <- t(OTU_decontaminated) 
+
+samples_df <- data.frame(sample_data(immc_decontam))  
+samples_dfp <- samples_df %>% select(type2, sample, group )
+
+OTUp <- merge(samples_dfp , OTUp, by = 'row.names', all = TRUE) 
+
+```
+
+### Coral1
+```{r, message=FALSE}
+
+OTUp_Coral1 <- OTUp %>% filter (type2 == "Coral1") %>% select( -c(Row.names, type2, sample, group ))
+samples_Coral1 <- samples_dfp %>% filter (type2 == "Coral1")
+
+permanova <- adonis2(OTUp_Coral1~ group ,
+                     data = samples_Coral1 , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_Coral1~ group ,
+                     data = samples_Coral1 , permutations=999, method = "bray")
+permanova_p
+
+```
+
+### Coral2
+```{r, message=FALSE}
+
+OTUp_Coral2 <- OTUp %>% filter (type2 == "Coral2") %>% select( -c(Row.names, type2, sample, group ))
+samples_Coral2 <- samples_dfp %>% filter (type2 == "Coral2")
+
+permanova <- adonis2(OTUp_Coral2~ group ,
+                     data = samples_Coral2 , permutations=999, method = "bray")
+
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_Coral2~ group ,
+                                data = samples_Coral2 , permutations=999, method = "bray")
+permanova_p
+```
+
+### Coral-W
+```{r, message=FALSE}
+
+OTUp_CoralW <- OTUp %>% filter (type2 == "Coral-W") %>% select( -c(Row.names, type2, sample, group ))
+samples_CoralW <- samples_dfp %>% filter (type2 == "Coral-W")
+
+permanova <- adonis2(OTUp_CoralW~ group ,
+                     data = samples_CoralW , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_CoralW~ group ,
+                                data = samples_CoralW, permutations=999, method = "bray")
+permanova_p
+
+```
+
+### Mangrove: Water
+```{r, message=FALSE}
+
+OTUp_MangroveW <- OTUp %>% filter (type2 == "Mangrove: Water") %>% select( -c(Row.names, type2, sample, group ))
+samples_MangroveW  <- samples_dfp %>% filter (type2 == "Mangrove: Water")
+
+permanova <- adonis2(OTUp_MangroveW ~ group ,
+                     data = samples_MangroveW  , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_MangroveW~ group ,
+                                data = samples_MangroveW, permutations=999, method = "bray")
+permanova_p
+```
+
+### Mangrove: Sediment
+```{r, message=FALSE}
+
+OTUp_MangroveS <- OTUp %>% filter (type2 == "Mangrove: Sediment") %>% select( -c(Row.names, type2, sample, group ))
+samples_MangroveS <- samples_dfp %>% filter (type2 == "Mangrove: Sediment")
+
+permanova <- adonis2(OTUp_MangroveS~ group ,
+                     data = samples_MangroveS , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_MangroveS~ group ,
+                                data = samples_MangroveS, permutations=999, method = "bray")
+permanova_p
+
+
+
+```
+
+## Functional Diversity
+```{r}
+abund <- read_excel("KO.Abund.xlsx", sheet ="abundance")
+samples_df <- read_excel("KO.Abund.xlsx", sheet ="Sample")%>% 
+  filter(!sample%in%c("qiagen_PC1", "titanF_PC3","titanL_PC2")) 
+oldnames <- samples_df$F
+newnames <- samples_df$sample
+data.table::setnames(abund,oldnames,newnames, skip_absent=TRUE)
+
+otu_dat <- abund  %>% 
+  select(-PC) %>%
+  rowwise() %>% 
+  filter(sum(c_across("titanF_C1":"titanF_M9")) != 0) 
+
+samples_df <- samples_df %>%
+  tibble::column_to_rownames("sample") 
+colnames(samples_df)[1] <- "sample"
+
+tax_dat <- read_excel("KO.Abund.xlsx", sheet ="taxa")
+
+OTU = otu_table(as.matrix(otu_dat[,-1]), taxa_are_rows = TRUE)
+TAX = tax_table(as.matrix(tax_dat))
+samples = sample_data(samples_df)
+
+
+ko_ps <- phyloseq(OTU, TAX, samples)
+taxa_names(ko_ps ) <- otu_dat$kegg
+ko_ps <- prune_taxa(!taxa_names(ko_ps )=="Unclassified", ko_ps )
+
+```
+
+## Permanova
+
+```{r}
+
+set.seed(101)
+OTUp <- t(otu_table(ko_ps)) 
+
+samples_dfp <- samples_df %>% select(type2, sample, group )
+
+OTUp <- merge(samples_dfp , OTUp, by = 'row.names', all = TRUE) 
+
+```
+
+### Coral1
+```{r, message=FALSE}
+
+OTUp_Coral1 <- OTUp %>% filter (type2 == "Coral1") %>% select( -c(Row.names, type2, sample, group ))
+samples_Coral1 <- samples_dfp %>% filter (type2 == "Coral1")
+
+permanova <- adonis2(OTUp_Coral1~ group ,
+                     data = samples_Coral1 , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_Coral1~ group ,
+                                data = samples_Coral1 , permutations=999, method = "bray")
+permanova_p
+
+```
+
+### Coral2
+```{r, message=FALSE}
+
+OTUp_Coral2 <- OTUp %>% filter (type2 == "Coral2") %>% select( -c(Row.names, type2, sample, group ))
+samples_Coral2 <- samples_dfp %>% filter (type2 == "Coral2")
+
+permanova <- adonis2(OTUp_Coral2~ group ,
+                     data = samples_Coral2 , permutations=999, method = "bray")
+
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_Coral2~ group ,
+                                data = samples_Coral2 , permutations=999, method = "bray")
+permanova_p
+```
+
+### Coral-W
+```{r, message=FALSE}
+
+OTUp_CoralW <- OTUp %>% filter (type2 == "Coral-W") %>% select( -c(Row.names, type2, sample, group ))
+samples_CoralW <- samples_dfp %>% filter (type2 == "Coral-W")
+
+permanova <- adonis2(OTUp_CoralW~ group ,
+                     data = samples_CoralW , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_CoralW~ group ,
+                                data = samples_CoralW, permutations=999, method = "bray")
+permanova_p
+
+```
+
+### Mangrove: Water
+```{r, message=FALSE}
+
+OTUp_MangroveW <- OTUp %>% filter (type2 == "Mangrove: Water") %>% select( -c(Row.names, type2, sample, group ))
+samples_MangroveW  <- samples_dfp %>% filter (type2 == "Mangrove: Water")
+
+permanova <- adonis2(OTUp_MangroveW ~ group ,
+                     data = samples_MangroveW  , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_MangroveW~ group ,
+                                data = samples_MangroveW, permutations=999, method = "bray")
+permanova_p
+
+```
+
+### Mangrove: Sediment
+```{r, message=FALSE}
+
+OTUp_MangroveS <- OTUp %>% filter (type2 == "Mangrove: Sediment") %>% select( -c(Row.names, type2, sample, group ))
+samples_MangroveS <- samples_dfp %>% filter (type2 == "Mangrove: Sediment")
+
+permanova <- adonis2(OTUp_MangroveS~ group ,
+                     data = samples_MangroveS , permutations=999, method = "bray")
+permanova
+
+permanova_p <- pairwise.adonis2(OTUp_MangroveS~ group ,
+                                data = samples_MangroveS, permutations=999, method = "bray")
+permanova_p
+```
+
