@@ -1,11 +1,10 @@
 
-library(tidyverse)
 library(circlize)
 library(ComplexHeatmap)
 
 rm(list = ls())
 source("functions.R")
-dat <- read_csv("~/Desktop/Alex/iMMC/dat_chord_mangrove.csv")
+dat <- read_csv("dat_chord_mangrove.csv")
 
 dat %>% pivot_longer(cols= Aliifodinibius:Fodinibius, names_to = "Genus", values_to = "count")
 
@@ -55,8 +54,7 @@ draw(LSW, x = unit(2, "cm"), y = unit(2, "cm"), just = c("left", "bottom"))
 
 ########################## Coral
 
-dat_Coral <- read_csv("~/Desktop/Alex/iMMC/dat_chord_coral.csv")
-colSums(dat_Coral)
+dat_Coral <- read_csv("dat_chord_coral.csv")
 
 ###################### Coral1
 dat_Coral1 <- dat_Coral %>% filter(Biome == "Coral1")
