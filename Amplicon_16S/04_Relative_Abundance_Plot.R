@@ -49,8 +49,6 @@ gp_p = tax_glom(immc_decontam, taxrank = "Family")
 rabundf = transform_sample_counts(gp_p, function(x) {x/sum(x)} )
 Rel.plot0 (rabund= rabundf, taxrank = "Family", topn = 10, sn = sn )
 #===============================================================================
-
-
 #pdf("Relative_Abundance_decontam.pdf", width=18, height=14)
 Rel.plot0 (rabund=  rabundg, taxrank = "Genus", topn = 10, sn = sn )
 Rel.plot0 (rabund= rabundf, taxrank = "Family", topn = 10, sn = sn )
