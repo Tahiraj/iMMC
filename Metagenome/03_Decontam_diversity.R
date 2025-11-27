@@ -98,7 +98,6 @@ permanova_p <- pairwise.adonis2(OTUp_MangroveS~ group ,
                                 data = samples_MangroveS, permutations=999, method = "bray")
 permanova_p
 
-
 biome <- c("Coral1", "Coral2", "Coral-W", "Mangrove: Water",  "Mangrove: Sediment")
 method <- c("Qiagen (Lab)", "xTitan (Field)", "xTitan (Lab)" )
 
@@ -108,7 +107,6 @@ method <- c("Qiagen (Lab)", "xTitan (Field)", "xTitan (Lab)" )
   
 #======================================================================
 # Functional Analysis
-
 #oldnames <- c(C1, C2, C3, C4, C5, C6, C7, C8, C9, M1, M2, M3, M4, M5, M6, M7, M8, M9, PC) 
 #newnames <- c(C01, C02, C03, C04, C05, C06, C07, C08, C09, M01, M02, M03, M04, M05, M06, M07, M08, M09, PC1)
 abund <- read_excel("KO.Abund.xlsx", sheet ="abundance")
@@ -133,11 +131,9 @@ OTU = otu_table(as.matrix(otu_dat[,-1]), taxa_are_rows = TRUE)
 TAX = tax_table(as.matrix(tax_dat))
 samples = sample_data(samples_df)
 
-
 ko_ps <- phyloseq(OTU, TAX, samples)
 taxa_names(ko_ps ) <- otu_dat$kegg
 ko_ps <- prune_taxa(!taxa_names(ko_ps )=="Unclassified", ko_ps )
-
 
 #====================== Mangrove
 
@@ -163,7 +159,7 @@ samples_dfp <- samples_df %>% select(type2, sample, group )
 
 OTUp <- merge(samples_dfp , OTUp, by = 'row.names', all = TRUE) 
 
-#+++++++++++++++++++++++++++++++++==++=====+++++=
+#++++++++++++++++++++++++++++++
 
 OTUp_Coral1 <- OTUp %>% filter (type2 == "Coral1") %>% select( -c(Row.names, type2, sample, group ))
 samples_Coral1 <- samples_dfp %>% filter (type2 == "Coral1")
