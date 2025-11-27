@@ -258,9 +258,9 @@ pdf("differential_Abundance_Mangrove.pdf", width=9, height=11)
 differential_Abundance_Mangrove
 dev.off()
 
-############################
+#===================================
 #Differential expression analysis
-####################################
+#===================================
 #BiocManager::install("DESeq2")
 library(DESeq2)
 deseq <- function(phy_dat, sn, alpha) {
@@ -334,7 +334,7 @@ deseqtab <- function (phy_dat) {
   sigtab_MS_tt <- sigtab_MS_tt %>% mutate (Biome= "Mangrove: Sediment", Method= "xTitan(L):xTitan(F)")
   
   sigtab_MS_tt0 <- sigtab_taxa (sigtab=sigtab_MS_tt, phy_dat, sn, a="titanL", b="titanF" )
-  #====================================
+  #================================================================
   #Qiagen Vs  xTitan(L) 
   
   sn = sn_Mang[grep ("titanL|qiagen", sn_Mang)]
@@ -346,11 +346,10 @@ deseqtab <- function (phy_dat) {
   
   sigtabM <-bind_rows(sigtab_MW_tt0, sigtab_MW_tq0, sigtab_MS_tt0, sigtab_MS_tq0)
   
-  return (sigtabM)
-  
+  return (sigtabM)  
 }
 
-########################################################################
+ #================================================================
 sigtabM <- deseqtab (immc_decontam )
 
 #write.csv (sigtabM, "diffabund_ASV_sigtabM.csv", row.names = FALSE)
@@ -412,8 +411,8 @@ grid.arrange(p2 ,p22, ncol=2, heights = c(1.5, 1), layout_matrix = rbind(c(1,2),
 grid.arrange(p1 ,p11, ncol=2, heights = c(1, 1,1), layout_matrix = rbind(c(1,2), c(1, NA),  c(NA, NA)))
 
 dev.off()
-#####################################
-abund <- read_csv("/Users/jamilt/Desktop/Alex/iMMC/Amplicon_16S/Results_ncbi_ITS_q15/diffabund_ASV_sigtabM.csv")
+#=================================================================
+abund <- read_csv("diffabund_ASV_sigtabM.csv")
 
 tab <- abund %>%  filter(grepl('Mang', Biome )) %>%
   group_by(Biome, Method) %>%
@@ -423,7 +422,7 @@ abund %>%  filter(grepl('Mang', Biome )) %>%
   select(Biome, Method) %>%
   table() %>%
   chisq.test() 
-# # Biome and Methods are correlated
+# Biome and Methods are correlated
 
 abund %>%  filter(grepl('Mang', Biome )) %>%
   select(Biome, Method) %>%
