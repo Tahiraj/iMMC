@@ -112,7 +112,6 @@ L3 = Legend(title = "Coral-Water", labels = colnames(matcoral1),
 draw(L3, x = unit(2, "cm"), y = unit(2, "cm"), just = c("left", "bottom"))
 
 ####################
-#dev.off()
 
 pushViewport(viewport(width = 0.9, height = 0.9))
 grid.rect()  # border
